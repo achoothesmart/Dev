@@ -1,5 +1,6 @@
 import os
 from Modules.ftp_client import FTPClient
+from Modules.vide_compressor import VideoCompressor
 
 class BackupTool:
 
@@ -23,9 +24,15 @@ if __name__ == '__main__':
     btool = BackupTool()
     btool.CreateFolders(btool.Folder_Original)
     btool.CreateFolders(btool.Folder_Compressed)
-    ftpClient = FTPClient(host=btool.host, port=btool.port, username=btool.user, password=btool.pwd)
-    ftpClient.CopyFilesFromFTPSource(FTP_SourceLocation=btool.SourceFolder,
-                                     LocalDestinationPath=btool.Folder_Original,
-                                     FilterInExtns=['mp4'])
-    print('Backup complete!')
-        
+    # ftpClient = FTPClient(host=btool.host, port=btool.port, username=btool.user, password=btool.pwd)
+    # ftpClient.CopyFilesFromFTPSource(FTP_SourceLocation=btool.SourceFolder,
+    #                                  LocalDestinationPath=btool.Folder_Original,
+    #                                  FilterInExtns=['mp4'])
+    # print('Backup complete!')
+
+
+    vc = VideoCompressor()
+    vc.CompressVideosFromFolder(SourceFolderPath=btool.Folder_Original,
+                                DestinationFolderPath=btool.Folder_Compressed,
+                                CompressionPercentage=70)
+    print('Compression Complete!')
