@@ -7,11 +7,15 @@ class VideoCompressor:
     def __init__(self) -> None:
         pass
 
+    def debugInfo(self, VideoFilePath: str):
+        clip = VideoFileClip(VideoFilePath)
+        print(f'Height: {clip.h}, Width: {clip.w}')
+
     def CompressVideo(self, InFilePath: str, OutFilePath: str, CompressionPercentage: float = 50.0):
         # Sample VideoFilePath = 'Z:/TempFiles/VID_20230804_124743374.mp4'
-        video = VideoFileClip(InFilePath)
+        clip = VideoFileClip(InFilePath)
         resize_value = CompressionPercentage / 100
-        video_resized = video.resize(resize_value)
+        video_resized = clip.resize(resize_value)
         out_file_path = OutFilePath.replace('.', f'_comp_{CompressionPercentage}.')
         out_file_name = os.path.basename(out_file_path)
         temp_out_file_path = os.path.join(os.path.dirname(out_file_path), f'~{out_file_name}')
@@ -51,11 +55,13 @@ class VideoCompressor:
         if len(video_files) > 0:
             print(f'Compression started | Source Folder: "{SourceFolderPath}" | Destination Folder: "{DestinationFolderPath}"')
             for idx, video_file in enumerate(video_files):
-                print(f'Compressing {idx+1}/{len(video_files)} | {video_file}')
-                self.CompressVideo(
-                    InFilePath=os.path.join(SourceFolderPath, video_file), 
-                    OutFilePath=os.path.join(DestinationFolderPath, video_file),
-                    CompressionPercentage=CompressionPercentage)
+                print(f'Processing {idx+1}/{len(video_files)} | {video_file}')
+                # self.CompressVideo(
+                #     InFilePath=os.path.join(SourceFolderPath, video_file), 
+                #     OutFilePath=os.path.join(DestinationFolderPath, video_file),
+                #     CompressionPercentage=CompressionPercentage)
+
+                self.debugInfo(VideoFilePath=os.path.join(SourceFolderPath, video_file))
         else:
             print(f' !! No video files to compress in "{SourceFolderPath}" path !!')
         print(' $$ All Done $$ ')

@@ -34,5 +34,5 @@ if __name__ == '__main__':
     vc = VideoCompressor()
     vc.CompressVideosFromFolder(SourceFolderPath=btool.Folder_Original,
                                 DestinationFolderPath=btool.Folder_Compressed,
-                                CompressionPercentage=70)
+                                CompressionPercentage=60)
     print('Compression Complete!')
