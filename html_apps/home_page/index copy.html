@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasanna's Home</title>
+    <style>
+        body {
+            background-color: rgb(91, 91, 91);
+            color: white;
+        }
+
+        .dark-bg {
+            background-color: rgb(91, 91, 91);
+        }
+
+        .link {
+            display: block;
+            font-size: x-large;
+            cursor: pointer;
+        }
+
+        .width-5 {
+            width: 5em;
+            padding: .15em;
+            border-radius: .25em;
+        }
+
+        .width-5:hover {
+            background-color: rgb(74, 74, 74);
+        }
+
+        .container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+
+        .container .container-item {
+            padding: 1em;
+        }
+
+        .controls {
+            flex-direction: column;
+            font-size: small;
+            width: 15em;
+            align-items: baseline;
+        }
+
+        .controls input {
+            font-size: large;
+        }
+
+        .controls .control-item {
+            padding: .5em;
+        }
+
+        .controls .control-item:hover {
+            background-color: rgb(74, 74, 74);
+            cursor: pointer;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 20px 0;
+
+        }
+
+        #footer .ani-bar {
+            width: 1em;
+            height: 5em;
+            /* Initial height */
+            background-color: #fff;
+            transition: height 0.8s ease, background-color 0.8s ease;
+            /* Smooth transition for height & bg-color change */
+        }
+
+        #footer .ani-bar:hover,
+        #footer .ani-bar.init {
+            height: 8em;
+            /* Increase height on hover */
+            background-color: #d71717;
+            transition: height 0.05s ease, background-color 0.05s ease;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Prasanna's Home</h1>
+
+
+    <!-- Links Section -->
+    <div id="general-links" class="container"></div>
+
+    <div id="footer">
+        <div id="controls" class="container controls">
+            <div id="btn_init_animation" class="container-item control-item">
+                <input id="chk_init_animation" type="checkbox" /> Initial Animation
+            </div>
+            <div id="btn_click_animation" class="container-item control-item">
+                <input id="chk_click_animation" type="checkbox" /> Click Animation
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Templates
+        var img_src_path = 'C:\\Dev\\html_apps\\home_page\\images\\'
+        var lst_general_links = [
+            {
+                url: 'https://www.google.com/',
+                img: 'googlelogo_light_color_272x92dp.png'
+            },
+            {
+                url: 'https://mail.google.com/mail/u/0/',
+                img: 'logo_gmail_lockup_dark_2x_r5.png'
+            },
+            {
+                url: 'https://www.google.com/maps',
+                img: 'Google_Maps_icon_(2015-2020).svg.png'
+            },
+            {
+                url: 'https://www.linkedin.com/',
+                img: 'linkedin_icon.png'
+            },
+            {
+                url: 'https://www.ambitionbox.com/',
+                img: 'AmbitionBox_icon.png'
+            },
+            {
+                url: 'https://chat.openai.com/',
+                img: '1681038628chatgpt-icon-logo.webp'
+            },
+            {
+                url: 'https://www.youtube.com/',
+                img: 'youtube_logo.png'
+            },
+            {
+                url: 'https://tcsglobal.udemy.com/organization/home/',
+                img: 'Udemy-Emblem.png'
+            },
+            {
+                url: 'https://www.ultimatix.net/',
+                img: 'logo_ultimatix.svg'
+            }
+        ]
+
+        var template = `<div class="container-item">
+            <a target="_blank" href="{{URL}}" class="link"> 
+                <img class="dark-bg width-5" src="${img_src_path}{{IMG}}"/>{{ALT}}
+            </a>
+        </div>`
+
+
+        // Globals
+        var ani_bar_count = 80
+        var ani_scale = 5000 / ani_bar_count
+        var ani_bar_index = 0
+        var Settings
+
+        // Functions
+
+        function init() {
+            Settings = getSettingsFromLocalStorage()
+            load_links()
+            load_footer()
+            add_event_handlers()
+            LoadSettingsInUI()
+
+            if (Settings.INITIAL_ANIMATION) {
+                start_animation()
+            }
+        }
+
+        function LoadSettingsInUI() {
+            chk_init_animation.checked = Settings.INITIAL_ANIMATION
+            chk_click_animation.checked = Settings.CLICK_ANIMATION
+        }
+
+        function getSettingsFromLocalStorage() {
+            // settings: INITIAL_ANIMATION, CLICK_ANIMATION
+            let settings = {}
+            try {
+                let _init_anim = localStorage.getItem('INITIAL_ANIMATION')
+                let _click_anim = localStorage.getItem('CLICK_ANIMATION')
+                if (!['true', 'false'].includes(_init_anim)) {
+                    localStorage.setItem('INITIAL_ANIMATION', true)
+                }
+                if (!['true', 'false'].includes(_click_anim)) {
+                    localStorage.setItem('CLICK_ANIMATION', true)
+                }
+                settings.INITIAL_ANIMATION = JSON.parse(localStorage.getItem('INITIAL_ANIMATION'))
+                settings.CLICK_ANIMATION = JSON.parse(localStorage.getItem('CLICK_ANIMATION'))
+            } catch {
+                settings.INITIAL_ANIMATION = true
+                settings.CLICK_ANIMATION = true
+            }
+            return settings
+        }
+
+        function add_event_handlers() {
+            // 1. Add click event handler to animation bars
+            document.querySelectorAll('.ani-bar').forEach(aniBar => {
+                aniBar.addEventListener('click', (event) => {
+                    if (Settings.CLICK_ANIMATION) {
+                        aniBarId = event.target.id
+                        aniBarIndex = aniBarId.split('_')[2]
+                        ani_bar_index = parseInt(aniBarIndex)  // Animation is set to start from this index
+                        start_animation()
+                    }
+                })
+            })
+
+            btn_init_animation.addEventListener('click', (event) => {
+                if(event.target != chk_init_animation){
+                    chk_init_animation.checked = !chk_init_animation.checked
+                }
+                localStorage.setItem('INITIAL_ANIMATION', chk_init_animation.checked)
+                Settings.INITIAL_ANIMATION = chk_init_animation.checked
+            })
+            btn_click_animation.addEventListener('click', (event) => {
+                if (event.target != chk_click_animation) {
+                    chk_click_animation.checked = !chk_click_animation.checked
+                }
+                localStorage.setItem('CLICK_ANIMATION', chk_click_animation.checked)
+                Settings.CLICK_ANIMATION = chk_click_animation.checked
+
+            })
+        }
+
+        function load_footer() {
+            let footer = document.querySelector('#footer')
+            for (i = 0; i < ani_bar_count; ++i) {
+                footer.innerHTML += `<div class="ani-bar" id="ani_bar_${i}"></div>`;
+            }
+        }
+
+        function load_links() {
+            // General Links
+            let el_general_links = document.getElementById('general-links')
+            lst_general_links.forEach((link) => {
+                link_template = template.replace('{{URL}}', link.url)
+                if (link.img != undefined) {
+                    link_template = link_template.replace('{{IMG}}', link.img)
+                    link_template = link_template.replace('{{ALT}}', '')
+                }
+                else {
+                    link_template = link_template.replace('{{IMG}}', '')
+                    link_template = link_template.replace('{{ALT}}', link.url)
+                }
+                let el_link = document.createElement('div')
+                el_link.innerHTML = link_template
+                el_general_links.appendChild(el_link.firstChild)
+            })
+
+        }
+
+        // Animation functions
+        function add_init_class(index) {
+            let ani_bar_el = document.getElementById(`ani_bar_${index}`)
+            if (ani_bar_el != null) {
+                ani_bar_el.classList.add('init')
+            }
+            // console.log(`add_init_class() : ani_bar_${index}`)
+        }
+
+        function remove_init_class(index) {
+            let ani_bar_el = document.getElementById(`ani_bar_${index}`)
+            if (ani_bar_el != null) {
+                ani_bar_el.classList.remove('init')
+            }
+            // console.log(`remove_init_class() : ani_bar_${index}`)
+        }
+
+        function _timer_tick(int_obj) {
+            add_init_class(ani_bar_index)
+            remove_init_class(ani_bar_index - 1)
+            if (ani_bar_index >= ani_bar_count) {
+                clearInterval(int_obj)
+            }
+            ani_bar_index += 1
+        }
+
+        // start the animation
+        function start_animation() {
+            // clearInterval(interval_obj)
+            let interval_obj = setInterval(() => { _timer_tick(interval_obj) }, ani_scale)
+            // console.log(`Started animation at scale: ${ani_scale}`)
+        }
+
+
+        init()
+
+    </script>
+</body>
+
+</html>

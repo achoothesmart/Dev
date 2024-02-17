@@ -1,0 +1,4 @@
+{
+    "DEFAULT_INTERVAL_SECS": 300,
+    "REPORT_DIR": "Z:\\Reports\\BatteryStatus"
+}

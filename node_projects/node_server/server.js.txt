@@ -1,0 +1,56 @@
+const http = require('http');
+const crypto = require('crypto');
+
+// Create an object to store session data
+const sessions = {};
+
+// Create a server
+const server = http.createServer((req, res) => {
+  if (req.url === '/login' && req.method === 'POST') {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      // Here, you would typically validate the user's credentials
+      // For simplicity, we'll assume successful login
+
+      // Generate a unique session ID
+      const sessionId = crypto.randomBytes(16).toString('hex');
+
+      // Store some session data (e.g., user ID)
+      sessions[sessionId] = { userId: 'exampleUser' };
+
+      // Set the session ID as a cookie
+      res.setHeader('Set-Cookie', `sessionID=${sessionId}; HttpOnly; Secure`);
+
+      res.end('Login successful');
+    });
+  } else if (req.url === '/dashboard') {
+    // Retrieve the session ID from the cookie
+    const cookies = req.headers.cookie || '';
+    const sessionIdMatch = cookies.match(/sessionID=([a-f0-9]+)/);
+    
+    if (sessionIdMatch) {
+      const sessionId = sessionIdMatch[1];
+      // Check if the session ID is valid
+      if (sessions[sessionId]) {
+        const userId = sessions[sessionId].userId;
+        res.end(`Welcome to the dashboard, ${userId}!`);
+      } else {
+        res.statusCode = 401;
+        res.end('Unauthorized');
+      }
+    } else {
+      res.statusCode = 401;
+      res.end('Unauthorized');
+    }
+  } else {
+    res.end('Welcome to the home page');
+  }
+});
+
+const port = 3000;
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

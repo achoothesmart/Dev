@@ -55,4 +55,4 @@ class FTPClient:
     
 
 if __name__ == '__main__':
-    print('This is a lib file!')
+    print('This is a lib file! Import FTPClient in your module to use.')

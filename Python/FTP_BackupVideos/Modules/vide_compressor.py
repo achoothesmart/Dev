@@ -10,6 +10,8 @@ class VideoCompressor:
     def debugInfo(self, VideoFilePath: str):
         clip = VideoFileClip(VideoFilePath)
         print(f'Height: {clip.h}, Width: {clip.w}')
+        with open('video_file_sizes_log.csv', 'a') as f:
+            f.write(f'{VideoFilePath},{clip.h},{clip.w}\n')
 
     def CompressVideo(self, InFilePath: str, OutFilePath: str, CompressionPercentage: float = 50.0):
         # Sample VideoFilePath = 'Z:/TempFiles/VID_20230804_124743374.mp4'

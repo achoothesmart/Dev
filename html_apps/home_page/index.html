@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasanna's Home</title>
+    <style>
+        
+        .link {
+            display: flex;
+            font-size: x-large;
+            cursor: pointer;
+            width: 7em;
+            height: 7em;
+            align-items:center;
+            justify-content: center;
+        }
+
+        .link-item {
+            width: 5em;
+            padding: .15em;
+            border-radius: .25em;
+            transition: width .3s ease;
+        }
+
+        .link-item:hover{
+            width: 7em;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .container .container-item {
+            padding: .25em;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Prasanna's Home</h1>
+
+
+    <!-- Links Section -->
+    <div id="general-links" class="container"></div>
+
+    <script>
+        var lst_general_links = [
+            {
+                url: 'https://www.google.com/',
+                img: 'Google_2015_logo-512.webp'
+            },
+            {
+                url: 'https://mail.google.com/mail/u/0/',
+                img: 'Gmail-Logo-PNG-Pic.png'
+            },
+            {
+                url: 'https://www.google.com/maps',
+                img: 'Google_Maps_icon_(2015-2020).svg.png'
+            },
+            {
+                url: 'https://www.linkedin.com/',
+                img: 'linkedin_icon.png'
+            },
+            {
+                url: 'https://www.ambitionbox.com/',
+                img: 'AmbitionBox_icon.png'
+            },
+            {
+                url: 'https://chat.openai.com/',
+                img: '1681038628chatgpt-icon-logo.webp'
+            },
+            {
+                url: 'https://www.youtube.com/',
+                img: 'youtube_logo.png'
+            },
+            {
+                url: 'https://tcsglobal.udemy.com/organization/home/',
+                img: 'Udemy-Emblem.png'
+            },
+            {
+                url: 'https://www.ultimatix.net/',
+                img: 'logo_ultimatix.svg'
+            }
+        ]
+    </script>
+
+    <script>
+
+        var img_src_path = 'C:\\Dev\\html_apps\\home_page\\images\\'
+
+        var template = `<div class="container-item">
+            <a target="_blank" href="{{URL}}" class="link"> 
+                <img class="link-item" src="${img_src_path}{{IMG}}"/>{{ALT}}
+            </a>
+        </div>`
+
+
+        // Globals
+
+        // Functions
+
+        function init() {
+            load_links()
+        }
+
+        function load_links() {
+            // General Links
+            let el_general_links = document.getElementById('general-links')
+            lst_general_links.forEach((link) => {
+                link_template = template.replace('{{URL}}', link.url)
+                if (link.img != undefined) {
+                    link_template = link_template.replace('{{IMG}}', link.img)
+                    link_template = link_template.replace('{{ALT}}', '')
+                }
+                else {
+                    link_template = link_template.replace('{{IMG}}', '')
+                    link_template = link_template.replace('{{ALT}}', link.url)
+                }
+                let el_link = document.createElement('div')
+                el_link.innerHTML = link_template
+                el_general_links.appendChild(el_link.firstChild)
+            })
+
+        }
+
+        init()
+
+    </script>
+</body>
+
+</html>
