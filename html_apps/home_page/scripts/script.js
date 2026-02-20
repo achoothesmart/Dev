@@ -1,10 +1,11 @@
 // Globals
 
 var clickCount = {}
+var showHidden = false;
 // load click counts from local storage
 var img_src_path = 'C:\\Dev\\html_apps\\home_page\\images\\'
 
-var template = `<div class="container-item">
+var template = `<div class="container-item" data-url="{{URL}}">
     <div class="link-controls">
       <div class="link-controls-item" onclick=""></div>
     </div>
@@ -53,9 +54,27 @@ function load_links() {
 
     let el_link = document.createElement('div')
     el_link.innerHTML = link_template
-    el_general_links.appendChild(el_link.firstChild)
+    let containerItem = el_link.firstChild
+    containerItem.setAttribute('data-active', link.isActive)
+    if (!link.isActive && !showHidden) {
+      containerItem.style.display = 'none'
+    }
+    el_general_links.appendChild(containerItem)
   })
 
+}
+
+function toggleShowHidden(event) {
+  showHidden = event.target.checked;
+  const items = document.querySelectorAll('[data-active]');
+  items.forEach((item) => {
+    const isActive = item.getAttribute('data-active') === 'true';
+    if (!isActive && !showHidden) {
+      item.style.display = 'none';
+    } else {
+      item.style.display = '';
+    }
+  });
 }
 
 function embed_spotify() {
