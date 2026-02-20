@@ -108,5 +108,20 @@ var lst_general_links = [
         name: 'Edube',
         url: 'https://edube.org/',
         img: 'OpenEDG_Logo_2023.png'
+    },
+    {
+        name: 'Kaggle',
+        url: 'https://www.kaggle.com/',
+        img: 'kaggle.png'
+    },
+    {
+        name: 'Prime Video',
+        url: 'https://www.primevideo.com/',
+        img: 'prime-video-logo.jpg'
+    },
+    {
+        name: 'Infosys Launchpad',
+        url: 'https://launchpad.infosysapps.com/',
+        img: 'infosys_launchpad.png'
     }
 ]

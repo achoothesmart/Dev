@@ -1,0 +1,30 @@
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  
+  .day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 5em;
+
+  }
+  
+  .date {
+    font-size: xx-small;
+  }
+
+  .event {
+    background-color: #007bff;
+    color: white;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 4px;
+  }
+  
