@@ -5,11 +5,14 @@ var clickCount = {}
 var img_src_path = 'C:\\Dev\\html_apps\\home_page\\images\\'
 
 var template = `<div class="container-item">
+    <div class="link-controls">
+      <div class="link-controls-item" onclick=""></div>
+    </div>
      <a target="_blank" href="{{URL}}" class="link" onclick="clicked('{{URL}}')"> 
          <img class="link-item" src="${img_src_path}{{IMG}}"/>{{ALT}}
          
      </a>
-     <div class="link-name">{{NAME}}</div>
+     <div class="link-name" title="Page visited {{CLICK_COUNT}} times!">{{NAME}}</div>
  </div>`
 
 // Functions
@@ -34,16 +37,19 @@ function load_links() {
   let el_general_links = document.getElementById('general-links')
   lst_general_links.forEach((link) => {
     link_template = template.replaceAll('{{URL}}', link.url)
-    if (link.img != undefined) {
-      link_template = link_template.replaceAll('{{NAME}}', link.name)
-      link_template = link_template.replaceAll('{{IMG}}', link.img)
-      link_template = link_template.replaceAll('{{ALT}}', '')
+    let link_name = link.name
+    let link_img = link.img
+    let link_alt = ''
+    if (!link.img) {
+      link_img = ''
+      link_alt = link.url
     }
-    else {
-      link_template = link_template.replaceAll('{{NAME}}', link.name)
-      link_template = link_template.replaceAll('{{IMG}}', '')
-      link_template = link_template.replaceAll('{{ALT}}', link.url)
-    }
+    link_template = link_template.replaceAll('{{NAME}}', link_name)
+    link_template = link_template.replaceAll('{{IMG}}', link_img)
+    link_template = link_template.replaceAll('{{ALT}}', link_alt)
+    link_template = link_template.replaceAll('{{CLICK_COUNT}}', link.clickCount)
+    
+
     let el_link = document.createElement('div')
     el_link.innerHTML = link_template
     el_general_links.appendChild(el_link.firstChild)

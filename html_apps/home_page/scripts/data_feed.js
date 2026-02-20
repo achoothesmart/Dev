@@ -63,5 +63,50 @@ var lst_general_links = [
         name: 'Tech Interview Handbook',
         url: 'https://www.techinterviewhandbook.org/',
         img: 'tip.svg'
+    },
+    // {
+    //     name: 'HackerRank',
+    //     url: 'https://www.hackerrank.com/dashboard',
+    //     img: 'hackerrank.png'
+    // },
+    {
+        name: 'CodeSignal',
+        url: 'https://app.codesignal.com/',
+        img: 'codesignal.png'
+    },
+    // {
+    //     name: 'CodeChef',
+    //     url: 'https://www.codechef.com/',
+    //     img: 'codechef.png'
+    // },
+    // {
+    //     name: 'GeeksforGeeks',
+    //     url: 'https://www.geeksforgeeks.org/',
+    //     img: 'geeksforgeeks.png'
+    // },
+    // {
+    //     name: 'Stack Overflow',
+    //     url: 'https://stackoverflow.com/',
+    //     img: 'stackoverflow.png'
+    // },
+    {
+        name: 'Take U Fwd',
+        url: 'https://takeuforward.org/',
+        img: 'takeuforward.png'
+    },
+    {
+        name: 'Hotstar',
+        url: 'https://www.hotstar.com/in',
+        img: 'jio-hotstar.webp'
+    },
+    {
+        name: 'Naukri',
+        url: 'https://www.naukri.com/',
+        img: 'naukri_gnb_logo.svg'
+    },
+    {
+        name: 'Edube',
+        url: 'https://edube.org/',
+        img: 'OpenEDG_Logo_2023.png'
     }
 ]
