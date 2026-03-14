@@ -6,6 +6,7 @@ var showHidden = false;
 var img_src_path = 'C:\\Dev\\html_apps\\home_page\\images\\'
 
 var template = `<div class="container-item" data-url="{{URL}}">
+    <button class="close-btn" onclick="toggleLinkActive('{{URL}}', event)">{{BUTTON}}</button>
     <div class="link-controls">
       <div class="link-controls-item" onclick=""></div>
     </div>
@@ -19,24 +20,32 @@ var template = `<div class="container-item" data-url="{{URL}}">
 // Functions
 
 function init() {
+  clickCount = {};
   reset_clickCount();
-  load_links()
+  load_inactiveLinks();
+  load_links();
   embed_spotify();
 }
 
 function load_links() {
-  // sort lst_general_links based on click count
+  // update active flags based on inactiveLinks
   lst_general_links.forEach((link) => {
     link.clickCount = 0;
     if (clickCount[link.url]) {
       link.clickCount = clickCount[link.url];
     }
+    // apply inactive state from storage
+    if (inactiveLinks[link.url]) {
+      link.isActive = false;
+    }
   });
-  lst_general_links = lst_general_links.sort((a, b) => (a.clickCount < b.clickCount) ? 1 : -1);
 
+  // sort lst_general_links based on click count
+  lst_general_links = lst_general_links.sort((a, b) => (a.clickCount < b.clickCount) ? 1 : -1);
 
   // General Links
   let el_general_links = document.getElementById('general-links')
+  el_general_links.innerHTML = ''; // clear existing entries
   lst_general_links.forEach((link) => {
     link_template = template.replaceAll('{{URL}}', link.url)
     let link_name = link.name
@@ -50,7 +59,9 @@ function load_links() {
     link_template = link_template.replaceAll('{{IMG}}', link_img)
     link_template = link_template.replaceAll('{{ALT}}', link_alt)
     link_template = link_template.replaceAll('{{CLICK_COUNT}}', link.clickCount)
-
+    // choose button label based on active state
+    const btnLabel = link.isActive ? '\u00D7' : '+';
+    link_template = link_template.replaceAll('{{BUTTON}}', btnLabel);
 
     let el_link = document.createElement('div')
     el_link.innerHTML = link_template
@@ -93,6 +104,79 @@ function embed_spotify() {
 
 }
 
+// inactive links storage
+var inactiveLinks = {};
+
+function toggleLinkActive(url, event) {
+  // decide based on current state
+  if (inactiveLinks[url]) {
+    reactivateLink(url, event);
+  } else {
+    deactivateLink(url, event);
+  }
+}
+
+function reactivateLink(url, event) {
+  event.stopPropagation();
+  // remove from storage
+  delete inactiveLinks[url];
+  saveInactiveLinks();
+  // update memory
+  let linkObj = lst_general_links.find(l => l.url === url);
+  if (linkObj) {
+    linkObj.isActive = true;
+  }
+  // update DOM element
+  let item = event.currentTarget.closest('.container-item');
+  if (item) {
+    item.setAttribute('data-active', 'true');
+    // change button to ×
+    let btn = item.querySelector('.close-btn');
+    if (btn) btn.textContent = '\u00D7';
+    // ensure it's visible
+    item.style.display = '';
+  }
+}
+
+function load_inactiveLinks() {
+  try {
+    inactiveLinks = JSON.parse(localStorage.getItem('inactiveLinksData')) || {};
+  } catch (ex) {
+    console.log('Exception While Loading Inactive Links: ', ex);
+    inactiveLinks = {};
+  }
+}
+
+function saveInactiveLinks() {
+  try {
+    localStorage.setItem('inactiveLinksData', JSON.stringify(inactiveLinks));
+  } catch (ex) {
+    console.log('Exception While Saving Inactive Links: ', ex);
+  }
+}
+
+function deactivateLink(url, event) {
+  event.stopPropagation();
+  inactiveLinks[url] = true;
+  saveInactiveLinks();
+  // also update our in-memory link list if present
+  let linkObj = lst_general_links.find(l => l.url === url);
+  if (linkObj) {
+    linkObj.isActive = false;
+  }
+  // update DOM element
+  let item = event.currentTarget.closest('.container-item');
+  if (item) {
+    item.setAttribute('data-active', 'false');
+    // change button to plus
+    let btn = item.querySelector('.close-btn');
+    if (btn) btn.textContent = '+';
+    if (!showHidden) {
+      item.style.display = 'none';
+    }
+  }
+}
+
 function authenticateSpotify() {
   // This function should handle the OAuth flow to get an access token
   const axios = require('axios');
@@ -129,6 +213,9 @@ function clicked(url) {
 function reset_clickCount() {
   try {
     clickCount = JSON.parse(localStorage.getItem('clickCountData'));
+    if (!clickCount) {
+      clickCount = {};
+    }
   }
   catch (ex) {
     console.log('Exception While Loading LocalStorage: ', ex);

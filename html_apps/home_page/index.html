@@ -125,6 +125,34 @@
             border-radius: 10px;
             background-color: rgba(27, 26, 26, 0.75);
             color: rgb(255, 254, 254);
+            position: relative; /* needed for absolute close button */
+        }
+
+        /* close button inside each link container */
+        .container .close-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: transparent;
+            border: none;
+            color: rgb(255, 254, 254);
+            font-size: 1.2em;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            opacity: 0; /* hidden by default */
+            transition: opacity 0.2s;
+        }
+        .container .container-item:hover .close-btn {
+            opacity: 1;
+        }
+        .container .close-btn:hover {
+            color: #ff5555;
+        }
+
+        /* dim inactive links when they are revealed */
+        .container .container-item[data-active="false"] {
+            opacity: 0.6;
         }
 
         .container .container-item:hover {

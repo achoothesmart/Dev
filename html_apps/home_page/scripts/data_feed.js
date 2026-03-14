@@ -42,6 +42,12 @@ var lst_general_links = [
         isActive: true
     },
     {
+        name: 'Claude',
+        url: 'https://claude.ai/',
+        img: 'claude-color.png',
+        isActive: true
+    },
+    {
         name: 'Youtube',
         url: 'https://www.youtube.com/',
         img: 'youtube_logo.png',
@@ -75,7 +81,7 @@ var lst_general_links = [
         name: 'Tech Interview Handbook',
         url: 'https://www.techinterviewhandbook.org/',
         img: 'tip.svg',
-        isActive: false
+        isActive: true
     },
     {
         name: 'CodeSignal',
@@ -123,6 +129,18 @@ var lst_general_links = [
         name: 'Infosys Launchpad',
         url: 'https://launchpad.infosysapps.com/',
         img: 'infosys_launchpad.png',
+        isActive: true
+    },
+    {
+        name: 'Chess.com',
+        url: 'https://www.chess.com/',
+        img: 'chess.com.webp',
+        isActive: true
+    },
+    {
+        name: 'Google Notebook LM',
+        url: 'https://notebooklm.google.com/',
+        img: 'notebooklm.webp',
         isActive: true
     }
 ]
