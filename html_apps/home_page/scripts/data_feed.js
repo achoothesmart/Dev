@@ -142,5 +142,17 @@ var lst_general_links = [
         url: 'https://notebooklm.google.com/',
         img: 'notebooklm.webp',
         isActive: true
+    },
+    {
+        name: 'Infosys Joining Webex Link',
+        url: 'https://infosys.webex.com/meet/sangeethas.murthy',
+        img: 'infosys.jpg',
+        isActive: true
+    },
+    {
+        name: 'Azure',
+        url: 'https://portal.azure.com',
+        img: 'Microsoft_Azure.svg',
+        isActive: true
     }
 ]
